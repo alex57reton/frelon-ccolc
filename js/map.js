@@ -155,11 +155,15 @@ export class MapView {
       fillColor: color,
       fillOpacity: 0.35,
     }).addTo(this.layerZones).bindPopup(`
-      <h4>Zone de triangulation</h4>
+      <h4>⚠ Zone de présence potentielle de nid</h4>
+      <p style="margin:6px 0 8px;font-size:0.86rem;line-height:1.5;color:var(--ink-soft);">
+        Recoupement de signalements : un nid de <em>Vespa velutina</em>
+        est probablement situé dans cette zone.
+      </p>
       <dl>
-        <dt>Confiance</dt><dd>${label}</dd>
+        <dt>Niveau de confiance</dt><dd>${label}</dd>
         <dt>Signalements croisés</dt><dd>${zone.nbSignalements}</dd>
-        <dt>Action</dt><dd>Inspection visuelle prioritaire</dd>
+        <dt>Action recommandée</dt><dd>Inspection visuelle à privilégier</dd>
       </dl>
     `);
 
@@ -173,7 +177,12 @@ export class MapView {
       iconAnchor: [16, 16],
     });
     L.marker([zone.lat, zone.lon], { icon, zIndexOffset: 1000 })
-      .addTo(this.layerZones);
+      .addTo(this.layerZones)
+      .bindTooltip(`Présence potentielle de nid · ${label}`, {
+        sticky: true,
+        direction: 'top',
+        offset: [0, -10],
+      });
   }
 
   _popupHtml(s) {
