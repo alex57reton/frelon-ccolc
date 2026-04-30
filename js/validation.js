@@ -28,7 +28,7 @@ const AdminAuth = {
   },
   isAuthenticated() { return this.getSession() !== null; },
   getToken() { return this.getSession()?.token ?? null; },
-  getAgentName() { return this.getSession()?.agentName ?? 'Super-agent'; },
+  getAgentName() { return this.getSession()?.agentName ?? 'Agent validateur'; },
 
   async login({ password, agentName }) {
     if (!password || password.length < 4) {
@@ -109,7 +109,7 @@ class ValidationApp {
     document.body.insertAdjacentHTML('beforeend', `
       <div class="modal-backdrop" id="admin-auth-modal">
         <div class="modal">
-          <h2 class="modal__title">Connexion super-agent</h2>
+          <h2 class="modal__title">Espace validation</h2>
           <p class="modal__subtitle">
             Accès réservé à la validation des signalements.
             Mot de passe distinct de l'application principale.
