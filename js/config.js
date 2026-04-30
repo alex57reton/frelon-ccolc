@@ -10,7 +10,7 @@
 export const CONFIG = {
   // URL du Cloudflare Worker (à mettre à jour après déploiement)
   // Tant que c'est null, mode local-storage seulement
-  WORKER_URL: null, // ex: 'https://frelon-ccolc.alexandre-halter.workers.dev'
+  WORKER_URL: 'https://frelon-ccolc.alex57reton.workers.dev',
 
   // Paramètres métier
   RAYON_VOL_METRES: 700,
