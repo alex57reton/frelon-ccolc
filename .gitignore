@@ -1,0 +1,20 @@
+# Dépendances
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Wrangler / Cloudflare
+worker/.wrangler/
+worker/node_modules/
+.dev.vars
+
+# Fichiers locaux
+.DS_Store
+.vscode/
+.idea/
+*.log
+
+# Données locales (jamais commités)
+data/local-test-*.json

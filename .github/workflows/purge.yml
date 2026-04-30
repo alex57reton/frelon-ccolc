@@ -1,0 +1,25 @@
+name: Purge des signalements > 30 jours
+
+# Filet de sécurité en plus du cron Cloudflare Worker.
+# Déclenche un appel HTTP POST sur l'endpoint /admin/purge du Worker.
+
+on:
+  schedule:
+    # Tous les jours à 4h UTC (5h ou 6h en France selon l'heure d'été)
+    - cron: '0 4 * * *'
+  workflow_dispatch: # Déclenchement manuel possible
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Appel endpoint purge
+        run: |
+          if [ -z "${{ secrets.WORKER_URL }}" ] || [ -z "${{ secrets.PURGE_TOKEN }}" ]; then
+            echo "⚠ Secrets WORKER_URL ou PURGE_TOKEN manquants — skip"
+            exit 0
+          fi
+          curl -X POST "${{ secrets.WORKER_URL }}/admin/purge" \
+            -H "Authorization: Bearer ${{ secrets.PURGE_TOKEN }}" \
+            --fail --silent --show-error
+          echo "✅ Purge déclenchée"

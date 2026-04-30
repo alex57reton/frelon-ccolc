@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frelon CCOLC — Triangulation des nids de Vespa velutina</title>
+  <meta name="description" content="Outil interne CCOLC de cartographie et triangulation des nids de frelons asiatiques.">
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/markers.css">
+
+  <link rel="icon" type="image/png" href="assets/logo.png">
+
+  <!-- Redirection vers le disclaimer si pas encore accepté pour cette session -->
+  <script>
+    if (sessionStorage.getItem('frelon_ccolc_disclaimer_ok') !== '1') {
+      location.replace('disclaimer.html');
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="app-header__brand">
+      <img src="assets/logo.png" alt="Logo" class="app-header__logo">
+      <div>
+        <h1 class="app-header__title">Frelon CCOLC</h1>
+        <p class="app-header__subtitle">Triangulation des nids · Vespa velutina</p>
+      </div>
+    </div>
+    <div class="app-header__user">
+      <span>Connecté : <strong id="agent-display">—</strong></span>
+      <button class="app-header__logout" id="logout-btn">Déconnexion</button>
+    </div>
+  </header>
+
+  <!-- Main layout -->
+  <main class="app-main">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+      <!-- Statistiques -->
+      <section class="sidebar__section">
+        <h2 class="section-title">
+          État du territoire
+          <span class="section-title__num">/01</span>
+        </h2>
+        <div class="stats-grid">
+          <div class="stat-tile">
+            <div class="stat-tile__label">Signalements actifs</div>
+            <div class="stat-tile__value" id="stat-actifs">—</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-tile__label">En attente</div>
+            <div class="stat-tile__value" id="stat-attente">—</div>
+          </div>
+          <div class="stat-tile stat-tile--alert">
+            <div class="stat-tile__label">Nids confirmés</div>
+            <div class="stat-tile__value" id="stat-nids">—</div>
+          </div>
+          <div class="stat-tile stat-tile--accent">
+            <div class="stat-tile__label">Zones triangulées</div>
+            <div class="stat-tile__value" id="stat-zones">—</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Formulaire -->
+      <section class="sidebar__section">
+        <h2 class="section-title">
+          Nouveau signalement
+          <span class="section-title__num">/02</span>
+        </h2>
+
+        <form id="signalement-form" autocomplete="off">
+
+          <div class="form-row">
+            <label for="adresse-input">Adresse ou point GPS</label>
+            <div class="autocomplete-wrap">
+              <input type="text" id="adresse-input" required
+                     placeholder="Ex : 12 rue des Jardins, Jarny"
+                     autocomplete="off">
+              <div class="autocomplete-list" id="autocomplete-list"
+                   style="display:none;"></div>
+            </div>
+            <p class="map-helper" style="margin:6px 0 0;font-size:0.72rem;">
+              ↳ ou cliquez directement sur la carte
+            </p>
+          </div>
+
+          <div class="form-row form-row--split">
+            <div>
+              <label for="type-observation">Type</label>
+              <select id="type-observation">
+                <option value="vol">Vol de frelons</option>
+                <option value="butinage">Butinage</option>
+                <option value="nid_visible">Nid visible</option>
+                <option value="activite_intense">Activité intense</option>
+              </select>
+            </div>
+            <div>
+              <label for="nombre-individus">Nombre</label>
+              <select id="nombre-individus">
+                <option value="1-5">1 à 5</option>
+                <option value="6-10">6 à 10</option>
+                <option value="10+">Plus de 10</option>
+                <option value="non_compte">Non compté</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="commentaire">Commentaire libre</label>
+            <textarea id="commentaire" rows="2"
+                      placeholder="Hauteur du vol, comportement, contexte..."></textarea>
+          </div>
+
+          <div class="form-row">
+            <label>Validation espèce — photo obligatoire</label>
+            <label for="photo-espece" class="file-input-wrap" id="photo-espece-wrap">
+              <div class="file-input-wrap__icon">📷</div>
+              <div class="file-input-wrap__label" id="photo-espece-label">
+                Cliquez pour ajouter une photo (obligatoire)
+              </div>
+              <img id="photo-espece-preview" class="file-preview" style="display:none;" alt="">
+              <input type="file" id="photo-espece" accept="image/*" capture="environment" required>
+            </label>
+            <p class="map-helper" style="margin:6px 0 0;font-size:0.72rem;">
+              Permet à un agent valideur de confirmer qu'il s'agit bien
+              de <em>Vespa velutina</em> et non d'une autre espèce.
+            </p>
+          </div>
+
+          <button type="submit" class="btn btn--primary" id="submit-btn">
+            Enregistrer le signalement
+          </button>
+
+        </form>
+      </section>
+
+      <!-- Légende -->
+      <section class="sidebar__section">
+        <h2 class="section-title">
+          Légende
+          <span class="section-title__num">/03</span>
+        </h2>
+        <ul class="legend-list">
+          <li>
+            <span class="legend-swatch legend-swatch--very-high"></span>
+            <span>Confiance très élevée <small>(5+ recoupements)</small></span>
+          </li>
+          <li>
+            <span class="legend-swatch legend-swatch--high"></span>
+            <span>Confiance élevée <small>(3–4 recoupements)</small></span>
+          </li>
+          <li>
+            <span class="legend-swatch legend-swatch--medium"></span>
+            <span>Confiance moyenne <small>(2 recoupements)</small></span>
+          </li>
+          <li>
+            <span class="legend-swatch legend-swatch--circle legend-swatch--single"></span>
+            <span>Signalement individuel <small>(rayon vol 700m)</small></span>
+          </li>
+          <li>
+            <span class="legend-swatch legend-swatch--circle legend-swatch--nest"></span>
+            <span>Nid confirmé</span>
+          </li>
+        </ul>
+      </section>
+
+    </aside>
+
+    <!-- Carte -->
+    <section class="map-zone">
+      <div id="map"></div>
+      <div class="map-overlay map-overlay--top-left">
+        <div class="map-helper">CCOLC · 41 communes</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast container -->
+  <div class="toast-stack" id="toast-stack"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- App (modules ES6) -->
+  <script type="module" src="js/app.js"></script>
+
+</body>
+</html>

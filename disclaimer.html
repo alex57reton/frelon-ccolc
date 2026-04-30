@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avertissement — Frelon CCOLC</title>
+  <link rel="stylesheet" href="css/app.css">
+  <style>
+    body {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 20px;
+    }
+    .disclaimer {
+      max-width: 920px;
+      background: var(--paper);
+      border-radius: var(--radius-md);
+      border-top: 4px solid var(--amber);
+      padding: 36px 40px;
+      box-shadow: var(--shadow-md);
+    }
+    .disclaimer__title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin: 0 0 4px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .disclaimer__subtitle {
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--amber-deep);
+      margin: 0 0 28px;
+    }
+    .disclaimer__warn {
+      font-size: 1.5rem;
+      color: var(--amber);
+    }
+    .disclaimer__split {
+      display: grid;
+      grid-template-columns: 220px 1fr 220px;
+      gap: 24px;
+      align-items: start;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 700px) {
+      .disclaimer__split { grid-template-columns: 1fr; }
+      .disclaimer__split img { max-width: 280px; margin: 0 auto; }
+    }
+    .disclaimer__split img {
+      width: 100%;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+    }
+    .disclaimer__caption {
+      font-size: 0.74rem;
+      text-align: center;
+      color: var(--ink-muted);
+      margin-top: 6px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.04em;
+    }
+    .disclaimer__text p {
+      margin: 0 0 12px;
+      line-height: 1.65;
+    }
+    .disclaimer__text strong {
+      background: linear-gradient(to bottom, transparent 60%, rgba(217,119,6,0.3) 60%);
+      padding: 0 2px;
+    }
+    .disclaimer__checks {
+      background: var(--paper-warm);
+      padding: 18px 20px;
+      border-left: 3px solid var(--amber);
+      margin: 20px 0 28px;
+      font-size: 0.92rem;
+    }
+    .disclaimer__checks label {
+      display: flex; align-items: flex-start; gap: 10px;
+      cursor: pointer; padding: 6px 0;
+    }
+    .disclaimer__checks input[type="checkbox"] {
+      width: 18px; height: 18px;
+      accent-color: var(--amber);
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="disclaimer">
+    <h1 class="disclaimer__title">
+      <span class="disclaimer__warn">⚠</span>
+      Avertissement préalable
+    </h1>
+    <p class="disclaimer__subtitle">Identification de l'espèce · Vespa velutina</p>
+
+    <div class="disclaimer__split">
+      <div>
+        <img src="assets/frelon_asiatique.jpg"
+             alt="Frelon asiatique (Vespa velutina)">
+        <div class="disclaimer__caption">
+          Vespa velutina<br>
+          <span style="color:var(--emerald);">À signaler</span>
+        </div>
+      </div>
+
+      <div class="disclaimer__text">
+        <p>
+          Cet outil est destiné à signaler exclusivement le
+          <strong>frelon asiatique (Vespa velutina)</strong>, espèce exotique
+          envahissante régulée par l'arrêté ministériel du 26 décembre 2012.
+        </p>
+        <p>
+          Le frelon européen (<em>Vespa crabro</em>), la guêpe commune, l'abeille
+          domestique et l'abeille noire <strong>ne sont pas concernés</strong>
+          par ce dispositif et sont, pour la plupart, des espèces utiles voire
+          protégées qu'il convient de préserver.
+        </p>
+        <p>
+          Les informations affichées sur cette plateforme constituent un
+          <strong>outil interne de cartographie</strong> à usage des agents
+          de la CCOLC. Elles ne se substituent pas à l'avis d'un professionnel
+          et n'autorisent en aucun cas l'intervention directe sur un nid.
+          Toute destruction doit être confiée à un opérateur agréé.
+        </p>
+      </div>
+
+      <div>
+        <img src="assets/autres_insectes.jpg"
+             alt="Autres hyménoptères à ne pas confondre">
+        <div class="disclaimer__caption">
+          Autres espèces<br>
+          <span style="color:var(--crimson);">Ne pas signaler</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="disclaimer__checks">
+      <label>
+        <input type="checkbox" id="check-1" required>
+        <span>
+          Je confirme avoir observé <strong>Vespa velutina</strong> et savoir
+          le distinguer du frelon européen, des guêpes et des abeilles.
+        </span>
+      </label>
+      <label>
+        <input type="checkbox" id="check-2" required>
+        <span>
+          Je m'engage à ne pas intervenir sur le nid et à laisser les
+          opérations de destruction aux professionnels agréés.
+        </span>
+      </label>
+      <label>
+        <input type="checkbox" id="check-3" required>
+        <span>
+          Je suis agent de la CCOLC et j'utilise cet outil dans un cadre
+          strictement professionnel.
+        </span>
+      </label>
+    </div>
+
+    <button type="button" class="btn btn--primary" id="continue-btn" disabled>
+      J'ai compris — accéder à l'outil
+    </button>
+  </div>
+
+  <script>
+    // Activation du bouton si toutes les cases cochées
+    const checks = document.querySelectorAll('.disclaimer__checks input[type="checkbox"]');
+    const btn = document.getElementById('continue-btn');
+    function update() {
+      btn.disabled = ![...checks].every(c => c.checked);
+    }
+    checks.forEach(c => c.addEventListener('change', update));
+
+    btn.addEventListener('click', () => {
+      sessionStorage.setItem('frelon_ccolc_disclaimer_ok', '1');
+      location.href = 'index.html';
+    });
+
+    // Si déjà accepté pour cette session, rediriger
+    if (sessionStorage.getItem('frelon_ccolc_disclaimer_ok') === '1') {
+      location.replace('index.html');
+    }
+  </script>
+</body>
+</html>

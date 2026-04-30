@@ -1,0 +1,27 @@
+name = "frelon-ccolc"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# === KV Namespaces ===
+# IMPORTANT : créer les deux namespaces avant le premier déploiement avec :
+#   wrangler kv:namespace create "SIGNALEMENTS"
+#   wrangler kv:namespace create "REGISTRE_PERMANENT"
+# Puis remplacer les ID ci-dessous par ceux retournés.
+
+[[kv_namespaces]]
+binding = "SIGNALEMENTS"
+id = "REMPLACER_PAR_ID_KV_SIGNALEMENTS"
+
+[[kv_namespaces]]
+binding = "REGISTRE_PERMANENT"
+id = "REMPLACER_PAR_ID_KV_REGISTRE"
+
+# === Cron Trigger ===
+# Purge automatique des signalements anciens chaque nuit à 3h UTC
+[triggers]
+crons = ["0 3 * * *"]
+
+# === Variables ===
+# AGENT_PASSWORD et JWT_SECRET sont stockés en secrets, pas en clair :
+#   wrangler secret put AGENT_PASSWORD
+#   wrangler secret put JWT_SECRET
