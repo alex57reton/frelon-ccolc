@@ -14,9 +14,13 @@
   --paper:      #f5f1ea;     /* crème chaude */
   --paper-warm: #ebe5d9;
   --line:       #d8d0c0;
-  --amber:      #d97706;     /* ambre frelon (accent principal) */
-  --amber-deep: #92400e;
-  --honey:      #f59e0b;
+  --olc-orange: #f48800;     /* Orange officiel OLC */
+  --olc-orange-deep: #c47000;
+  --olc-blue:   #007fc8;     /* Bleu officiel OLC */
+  --olc-blue-deep: #005d96;
+  --amber:      #f48800;     /* alias pour compat */
+  --amber-deep: #c47000;
+  --honey:      #f5a623;
   --crimson:    #b91c1c;     /* alerte */
   --emerald:    #047857;     /* succès / validation */
   --slate:      #475569;
@@ -61,20 +65,19 @@ a:hover { color: var(--ink); }
 .app-header {
   background: var(--ink);
   color: var(--paper);
-  padding: 18px 24px;
+  padding: 16px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 3px solid var(--amber);
+  border-bottom: 3px solid var(--olc-orange);
 }
 .app-header__brand {
-  display: flex; align-items: center; gap: 14px;
+  display: flex; align-items: center; gap: 18px;
 }
 .app-header__logo {
-  width: 40px; height: 40px;
-  background: var(--paper);
-  border-radius: 50%;
-  padding: 4px;
+  height: 44px;
+  width: auto;
+  /* OLC est un PNG transparent, pas besoin de fond blanc */
 }
 .app-header__title {
   font-family: var(--font-display);
@@ -88,7 +91,7 @@ a:hover { color: var(--ink); }
   font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--honey);
+  color: var(--olc-orange);
   margin: 2px 0 0;
   font-weight: 500;
 }
