@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validation — Frelon CCOLC</title>
+
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/validation.css">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+</head>
+<body class="validation-body">
+
+  <header class="val-header">
+    <div>
+      <h1 class="val-header__title">
+        Frelon CCOLC <span class="val-header__badge">Validation</span>
+      </h1>
+      <p class="val-header__subtitle">Super-agent · Vérification d'espèce</p>
+    </div>
+    <div class="val-header__nav">
+      <a href="index.html">← Retour à la carte</a>
+      <span style="color:rgba(245,241,234,0.7);">
+        Connecté : <strong style="color:var(--paper);" id="admin-name">—</strong>
+      </span>
+      <button class="app-header__logout" id="logout-btn">Déconnexion</button>
+    </div>
+  </header>
+
+  <main class="val-main">
+
+    <div class="val-toolbar">
+      <div class="val-toolbar__count" id="count">—</div>
+      <div class="val-toolbar__actions">
+        <button class="btn btn--ghost" id="refresh-btn">
+          ↻ Rafraîchir
+        </button>
+      </div>
+    </div>
+
+    <div id="signalements-list">
+      <div class="val-empty">
+        <div class="val-empty__icon">⏳</div>
+        <div class="val-empty__msg">Chargement...</div>
+      </div>
+    </div>
+
+  </main>
+
+  <script type="module" src="js/validation.js"></script>
+</body>
+</html>
